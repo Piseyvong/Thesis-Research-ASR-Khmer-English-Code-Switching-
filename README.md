@@ -21,6 +21,12 @@ The repository contains two main parts:
 
 The project is intended for academic, research, and demonstration purposes.
 
+## Research Motivation
+
+Khmer-English code-switching speech recognition is still an exploratory research topic, especially for practical Cambodian use cases where people naturally mix Khmer and English in daily work, technology, finance, education, and office communication.
+
+This project is designed to support people who are interested in speech-to-text systems for Khmer code-switching. It provides a practical reference for testing ASR models and exploring how speech recognition can connect to real internal request workflows in the Cambodian context.
+
 ## What The System Does
 
 At a high level, the system follows this workflow:
