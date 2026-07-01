@@ -1,156 +1,251 @@
-# Khmer–English Speech Request System (Prototype)
+# Voice-to-Text Automatic Internal Request Management System
 
-Production-style demo app for Khmer/English code-switching requests.
+Welcome to this thesis project repository. This project is shared for people who want to understand, review, test, or build on the work behind a Khmer-English code-switching speech system for internal request management.
 
-## Features
-- Employee chatbot-style page: upload audio, run each completed local ASR model, translate + extract request fields, edit fields, submit to manager.
-- Manager dashboard: review submitted requests, approve/reject/ask clarification, view confidence/model used.
-- Architecture-specific local ASR: Wav2Vec2 is loaded as `Wav2Vec2ForCTC`, and Whisper exports are loaded as `WhisperForConditionalGeneration`.
-- Incomplete or missing checkpoints are returned as unavailable; they are never downloaded or treated as a different model.
-- Confidence scoring is a **proxy** (heuristics) and designed for later calibration.
-- Mock email service: generates email content, stores it, and shows it in UI.
+## Thesis Review Notice
 
-## Required environment variables
-Create `.env` (copy from `.env.example`) and fill:
-- `AZURE_OPENAI_ENDPOINT`
-- `AZURE_OPENAI_API_KEY`
-- `AZURE_OPENAI_DEPLOYMENT_NAME` (defaults to `gpt-4o`)
-- `AZURE_OPENAI_API_VERSION`
-- `WAV2VEC_MODEL_PATH`
-- `WHISPER_SMALL_MODEL_PATH`
-- `WHISPER_MEDIUM_MODEL_PATH`
+This thesis report is still under review by the committee and jury of the Institute of Technology of Cambodia before final submission to the Ministry of Education, Youth and Sport.
 
-## Backend setup (FastAPI)
+Any thesis report or related document in this repository that is not marked as the final submitted version may still be changed, corrected, or updated after review. Please treat the current documentation as a review-stage academic artifact.
+
+## Project Summary
+
+**Thesis title:** Voice-to-Text Automatic Internal Request Management System
+
+This project explores how speech can be used to create internal business requests. A user can speak in Khmer-English code-switching language, the Automatic Speech Recognition (ASR) model converts the speech into text, and the application can then use a Large Language Model (LLM) API to convert the transcript into structured request information.
+
+The repository contains two main parts:
+
+- **ASR model testing:** code for testing trained ASR model exports on Khmer-English code-switching speech.
+- **End-to-end request system:** a demo web application where an end user can speak or upload a request, review the transcript and extracted fields, and submit the structured request for manager review.
+
+The project is intended for academic, research, and demonstration purposes.
+
+## What The System Does
+
+At a high level, the system follows this workflow:
+
+1. A user records or uploads speech.
+2. The backend decodes the audio and runs available ASR models.
+3. The selected transcript is shown to the user.
+4. If an LLM API key is configured, the transcript is sent to the LLM service.
+5. The LLM extracts structured request details such as request type, amount, currency, description, and missing fields.
+6. The user can review or edit the extracted request before submitting it.
+7. A manager can review submitted requests in the dashboard.
+
+The ASR part can be tested with local model weights. The full end-to-end extraction workflow also requires a user-provided LLM API key.
+
+## Important API Key Notice
+
+This repository does **not** provide private API keys or credentials.
+
+API keys are like private passwords. If they are shared publicly, other people may be able to use the account, create security risks, or generate unexpected costs. For that reason, real API keys are stored only in a local `.env` file and are intentionally excluded from GitHub.
+
+If you want to test the full request extraction workflow, you must create your own LLM API key and place it in your own `.env` file. Without a valid LLM API key, the system can still run ASR transcription, but it will not complete the structured request extraction step.
+
+## Repository Structure
+
+```text
+.
+|-- app/                  # FastAPI backend, ASR services, LLM service, request APIs
+|-- data/                 # Sample CSV files and test audio used for evaluation/demo
+|-- eval/                 # Offline ASR, LLM, and end-to-end evaluation scripts
+|-- frontend/             # React + Vite user interface
+|-- results/              # Existing evaluation output files and charts
+|-- scripts/              # Utility scripts, including Azure API connectivity check
+|-- requirements.txt      # Python backend dependencies
+|-- .env.example          # Environment variable template with placeholders only
+`-- README.md             # Project documentation
+```
+
+Local model files are expected under `app/models/`, but large model weights are ignored by Git because they can be very large. If you have been provided the trained ASR weights separately, place them in the expected folders before testing.
+
+## Thesis Documentation
+
+The thesis report and related documentation should be placed in the folder named:
+
+```text
+thesis documentation/
+```
+
+If the report in that folder is not marked as the final submitted version, it should be treated as a draft or review-stage document that may be altered after committee and jury review.
+
+## Model And System Components
+
+### ASR Model Testing
+
+The ASR testing part allows users to evaluate trained speech recognition models on Khmer-English code-switching speech. The backend model registry supports local ASR exports such as:
+
+- Wav2Vec2 CTC model exports
+- Whisper Small model exports
+- Whisper Medium model exports, if a completed local export is available
+
+The `/api/asr/transcribe` endpoint runs available local ASR models and returns transcript candidates with confidence and selection information.
+
+### End-To-End Internal Request System
+
+The web application demonstrates a practical end-user workflow:
+
+- employee login using mock users
+- audio upload or voice recording
+- speech transcription
+- request field extraction with an LLM API
+- editable structured request details
+- manager dashboard for review
+- mock email generation/storage
+
+The ASR model produces text. The LLM API is responsible for turning that text into structured request information. If the LLM API is not configured, the system cannot complete the full extraction workflow.
+
+## How To Use This Repository
+
+### 1. Clone The Repository
+
 ```bash
-cd "d:\I5 internship\Prototype"
-D:\Users\Asus\anaconda3\python.exe -m venv .venv-runtime
+git clone https://github.com/Piseyvong/Thesis-ASR-Khmer-English-Code-Switching-.git
+cd Thesis-ASR-Khmer-English-Code-Switching-
+```
+
+### 2. Install Backend Dependencies
+
+Create and activate a Python virtual environment, then install the backend requirements.
+
+```bash
+python -m venv .venv-runtime
 .\.venv-runtime\Scripts\activate
 pip install -r requirements.txt
+```
 
-# copy env
+On macOS or Linux, activation usually looks like:
+
+```bash
+source .venv-runtime/bin/activate
+```
+
+### 3. Prepare Environment Variables
+
+Copy the example environment file and fill in your own local values.
+
+```bash
 copy .env.example .env
+```
 
+On macOS or Linux:
+
+```bash
+cp .env.example .env
+```
+
+Do not commit the `.env` file.
+
+### 4. Place ASR Model Weights
+
+Place the trained ASR model exports in the configured local model folders. The default `.env.example` paths are:
+
+```env
+WAV2VEC_MODEL_PATH=app/models/wav2vec2_ctc
+WHISPER_SMALL_MODEL_PATH=app/models/small
+WHISPER_MEDIUM_MODEL_PATH=app/models/M
+```
+
+For Whisper exports, the folder should include files such as `config.json`, tokenizer files, preprocessor files, and model weights such as `model.safetensors` or `pytorch_model.bin`.
+
+### 5. Run The Backend
+
+```bash
 python -m uvicorn app.main:app --reload
 ```
-Backend runs at `http://127.0.0.1:8000`.
 
-`torch==2.5.1` is used only as the local inference runtime. Audio decoding uses `soundfile`/`librosa`; `torchaudio` is not required by this application.
+The backend runs at:
 
-### Test which ASR models are loaded
-- `GET /api/models`
+```text
+http://127.0.0.1:8000
+```
 
-### Test transcription with completed models
-1. Set `WAV2VEC_MODEL_PATH` to the completed Wav2Vec2 CTC export folder.
-2. Set `WHISPER_SMALL_MODEL_PATH` to the completed Whisper Small seq2seq export folder.
-3. Keep `WHISPER_MEDIUM_MODEL_PATH` pointed at `app/models/M` while training is unfinished; it will be reported as unavailable.
-4. Upload a WAV, FLAC, or OGG file to:
-   - `POST /api/asr/transcribe` (multipart `file`)
+Useful backend checks:
 
-The response includes the result/status for all three slots. Only completed local exports are run.
-When request creation compares more than one usable transcript, LLM candidate selection must succeed. A selection failure is reported as an error; the application does not silently select a different transcript through a local ranking fallback.
+```text
+GET /api/models
+POST /api/asr/transcribe
+```
 
-### Local model formats
-Wav2Vec2 CTC export (`app/models/wav2vec2_ctc`) must contain:
-- `config.json` with `Wav2Vec2ForCTC`
-- `preprocessor_config.json`
-- `tokenizer_config.json`
-- `vocab.json`
-- `model.safetensors` or `pytorch_model.bin`
+### 6. Run The Frontend
 
-Whisper seq2seq export (`app/models/small`, and later Medium) must contain:
-- `config.json`
-- `generation_config.json` (optional but recommended)
-- `preprocessor_config.json` or `processor_config.json`
-- tokenizer assets such as `tokenizer.json` or `vocab.json` + `merges.txt`
-- model weights such as `model.safetensors` or `pytorch_model.bin`
+Open a second terminal:
 
-The current `app/models/M` contains a LoRA adapter checkpoint only, so it is listed as incomplete and is not executed. When Medium training is done, provide a completed local inference export before enabling its transcription path.
-
-## Confidence selection (proxy)
-The ASR confidence scores are **not calibrated** across model families.
-- Wav2Vec2: average token softmax confidence (non-blank), with penalties for blank-heavy decoding, repetition, too-short output, and garbage-like text.
-- Whisper: uses transcript-quality heuristics for its current seq2seq generation path.
-- Optional transcript-quality heuristic boosts request-domain keywords (amount, location, reason, date, travel, claim, training, material, advance, project, expense) and penalizes loops/repetition.
-
-Because the metrics differ, the final score is a **confidence proxy** intended for ranking, not as a scientific probability.
-
-## Frontend setup (React + Vite)
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
-Frontend runs at `http://127.0.0.1:5173` and calls the backend at `http://127.0.0.1:8000`.
 
-Optional: set `VITE_API_BASE_URL` to point to a different backend.
-
-## Audio recording note
-Voice input converts the browser recording to PCM WAV before it is uploaded. Manual audio uploads are accepted as WAV, FLAC, or OGG only. The backend decodes through `soundfile`/libsndfile and returns an explicit error for any unsupported format; there is no alternate decoder fallback.
-
-## Sample data
-On first run, the backend seeds a sample employee + manager and a sample request draft.
-
-Note: this prototype uses `SQLModel.metadata.create_all()` (no migrations). If you ran an older version and the DB schema changed, delete `data/app.db` and restart.
-
-## Thesis Evaluation Pipeline
-The offline evaluation scripts live in `eval/` and do not change the website runtime behavior. They reuse the local ASR model registry and the existing Azure OpenAI extraction service.
-
-Prepare a labeled CSV with these columns:
-
-```csv
-audio_id,audio_path,reference_transcript,expected_form_type,expected_amount,expected_currency,expected_description
-```
-
-Run the evaluators from the project root:
-
-```bash
-python eval/evaluate_asr.py --csv data/test_labels.csv
-python eval/evaluate_llm_extraction.py --csv data/test_labels.csv
-python eval/evaluate_end_to_end.py --csv data/test_labels.csv
-```
-
-Outputs are written to `results/`:
-
-- `results/asr_model_comparison.csv`
-- `results/asr_model_summary.csv`
-- `results/llm_extraction_details.csv`
-- `results/llm_extraction_summary.csv`
-- `results/end_to_end_details.csv`
-- `results/end_to_end_summary.csv`
-- `results/charts/`
-
-Evaluation formulas used:
+The frontend runs at:
 
 ```text
-WER_i = edit_distance_words(reference_i, prediction_i) / number_of_reference_words_i
-CER_i = edit_distance_characters(reference_i, prediction_i) / number_of_reference_characters_i
-
-Average WER_m = (1 / N) * sum_i WER_i for ASR model m
-Average CER_m = (1 / N) * sum_i CER_i for ASR model m
-
-field_accuracy_i =
-  (form_type_correct_i + amount_correct_i + currency_correct_i + description_correct_i) / 4
-
-joint_accuracy_i =
-  1 if all required fields are correct for sample i, otherwise 0
-
-joint_system_accuracy_p =
-  (1 / N) * sum_i joint_accuracy_i for end-to-end pipeline p
-
-failure_rate_p =
-  number_of_failed_samples_p / total_number_of_samples_p
-
-average_latency_seconds_p =
-  (1 / N) * sum_i latency_seconds_i for pipeline p
+http://127.0.0.1:5173
 ```
 
-Matching rules:
+### 7. Test ASR Only
 
-- `form_type`: exact match after label normalization.
-- `amount`: exact numeric match after digit, English number-word, and Khmer number-word normalization where possible.
-- `currency`: exact match after normalization such as `USD`, `dollar`, `dollars`, and `ដុល្លារ`.
-- `description`: exact normalized text match first; otherwise keyword overlap is used. Rows that do not meet the overlap threshold are marked for manual review.
+To test ASR transcription only, use the frontend audio upload/recording flow or send an audio file to:
 
----
+```text
+POST /api/asr/transcribe
+```
 
-If you want, I can add docker-compose later, but this prototype is optimized for local thesis demos.
+This part requires the ASR model weights to be available locally.
+
+### 8. Test The Full End-To-End Workflow
+
+To test the complete workflow, including structured request extraction, add your own LLM API credentials to `.env`.
+
+If the LLM API key is missing, invalid, expired, or not authorized for the configured deployment, the system may still transcribe speech, but it will not extract the final structured request fields.
+
+## Example `.env` File
+
+Use placeholders only. Do not publish real credentials.
+
+```env
+APP_ENV=local
+APP_HOST=127.0.0.1
+APP_PORT=8000
+DATABASE_URL=sqlite:///./data/app.db
+
+# LLM / Azure OpenAI configuration
+AZURE_OPENAI_ENDPOINT=your_own_endpoint_here
+AZURE_OPENAI_API_KEY=your_own_api_key_here
+AZURE_OPENAI_DEPLOYMENT_NAME=your_deployment_name_here
+AZURE_OPENAI_API_VERSION=your_api_version_here
+
+# Local ASR model exports
+WAV2VEC_MODEL_PATH=app/models/wav2vec2_ctc
+WHISPER_SMALL_MODEL_PATH=app/models/small
+WHISPER_MEDIUM_MODEL_PATH=app/models/M
+```
+
+## Offline Evaluation Scripts
+
+The `eval/` folder contains scripts for thesis evaluation experiments:
+
+```bash
+python eval/evaluate_asr.py --csv data/test_labels_generated.csv
+python eval/evaluate_llm_extraction.py --csv data/test_labels_generated.csv
+python eval/evaluate_end_to_end.py --csv data/test_labels_generated.csv
+```
+
+Existing result files and charts are stored in `results/`.
+
+## Security Notes
+
+- Do not commit `.env`.
+- Do not upload private API keys.
+- Do not publish cloud credentials, service account files, or passwords.
+- Keep large local model weights out of normal Git commits unless a proper large-file storage method is used.
+- Use `.gitignore` to protect sensitive files, local databases, logs, virtual environments, and generated build files.
+
+## Intended Audience
+
+This README is written for both technical and non-technical readers, including academic reviewers, visa officers, supervisors, and developers. The purpose is to show what the project does, what is required to run it, and why private credentials are not included.
+
+## Academic Purpose
+
+This repository is provided as part of a thesis project and is intended for academic review, research, demonstration, and reproducibility of the system workflow where possible.
