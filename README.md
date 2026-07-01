@@ -250,7 +250,17 @@ Existing result files and charts are stored in `results/`.
 
 ## Intended Audience
 
-This README is written for both technical and non-technical readers, including academic reviewers, visa officers, supervisors, and developers. The purpose is to show what the project does, what is required to run it, and why private credentials are not included.
+Explain that this README is written for both technical and non-technical readers, including academic reviewers, supervisors, developers, and anyone interested in exploring Khmer-English code-switching speech recognition.
+
+Mention that the project may also be useful for:
+
+- People interested in code-switching ASR;
+- Students or researchers exploring speech-to-text systems;
+- Developers who want to understand how ASR can be connected to an end-to-end request management workflow;
+- People interested in rapid AI prototyping or “vibe coding” as a way to explore practical AI system ideas;
+- Anyone who wants to learn how voice input can be transformed into structured digital request data.
+
+Keep the wording professional and simple, so even readers without a technical background can understand the project purpose.
 
 ## Academic Purpose
 
