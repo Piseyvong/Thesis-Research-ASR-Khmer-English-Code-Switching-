@@ -1,0 +1,95 @@
+:root {
+  --brand: #4c000a;
+  --brand-strong: #360007;
+  --brand-surface: #f7ebed;
+  --page: #f4f1f0;
+  --surface: #ffffff;
+  --surface-muted: #fbf8f7;
+  --surface-strong: #f0ebea;
+  --text: #5d5356;
+  --text-strong: #171214;
+  --border: #e8e0e2;
+  --border-strong: #d9cfd2;
+  --success: #155e3b;
+  --warning: #93561c;
+  --danger: #8b2030;
+  --info: #335d91;
+  --ring: rgba(76, 0, 10, 0.18);
+  --shadow: 0 24px 60px rgba(33, 20, 24, 0.08);
+  --shadow-soft: 0 12px 28px rgba(33, 20, 24, 0.05);
+
+  font: 16px/1.5 "Aptos", "Segoe UI Variable Text", "Segoe UI", sans-serif;
+  letter-spacing: 0.01em;
+  color-scheme: light;
+  color: var(--text);
+  background: var(--page);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root[data-theme="dark"] {
+  --brand: #4c000a;
+  --brand-strong: #65101b;
+  --brand-surface: rgba(76, 0, 10, 0.22);
+  --page: #090b0f;
+  --surface: #11151c;
+  --surface-muted: #151a22;
+  --surface-strong: #1a202a;
+  --text: #a7b0bc;
+  --text-strong: #f5f7fa;
+  --border: #242b36;
+  --border-strong: #303847;
+  --success: #47b37f;
+  --warning: #d39a4e;
+  --danger: #da6676;
+  --info: #7da6df;
+  --ring: rgba(76, 0, 10, 0.45);
+  --shadow: 0 28px 70px rgba(0, 0, 0, 0.4);
+  --shadow-soft: 0 16px 36px rgba(0, 0, 0, 0.24);
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100svh;
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  overflow: hidden;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+svg {
+  display: block;
+}
+
+*:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px var(--ring);
+}

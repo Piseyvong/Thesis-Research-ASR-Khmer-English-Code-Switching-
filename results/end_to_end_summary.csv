@@ -1,0 +1,4 @@
+﻿amount_accuracy,average_latency_seconds,currency_accuracy,description_accuracy,failure_rate,field_accuracy,form_type_accuracy,joint_system_accuracy,num_samples,pipeline
+0.15,2.9141096799925434,0.85,0.0,0.05,0.4,0.6,0.0,20,wav2vec2
+0.35,6.276355295008398,0.65,0.0,0.0,0.425,0.7,0.0,20,whisper-small
+0.1,14.268850394993205,0.9,0.0,0.0,0.4625,0.85,0.0,20,whisper-medium

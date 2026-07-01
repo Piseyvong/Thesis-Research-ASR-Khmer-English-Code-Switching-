@@ -1,0 +1,2 @@
+﻿amount_accuracy,average_latency_seconds,currency_accuracy,description_accuracy,failure_rate,field_accuracy,form_type_accuracy,joint_accuracy,num_samples,pipeline
+0.0,2.3428976149938534,1.0,0.0,0.0,0.475,0.9,0.0,20,llm_reference_transcript

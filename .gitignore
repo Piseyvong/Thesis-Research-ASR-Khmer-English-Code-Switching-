@@ -1,0 +1,31 @@
+# Python
+.venv/
+.venv-runtime/
+venv/
+__pycache__/
+*.pyc
+
+# Local env (DO NOT COMMIT)
+.env
+
+# Local sqlite
+/data/app.db
+
+# Local models / large files
+/app/models/
+*.safetensors
+*.bin
+*.zip
+.venv.zip
+
+# Logs
+*.log
+bot_stdout.log
+bot_stderr.log
+
+# Local caches
+.matplotlib-cache/
+
+# Frontend
+/frontend/node_modules/
+/frontend/dist/
