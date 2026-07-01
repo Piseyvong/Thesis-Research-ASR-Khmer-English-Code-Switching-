@@ -255,3 +255,9 @@ This README is written for both technical and non-technical readers, including a
 ## Academic Purpose
 
 This repository is provided as part of a thesis project and is intended for academic review, research, demonstration, and reproducibility of the system workflow where possible.
+
+## Future Direction And Feedback
+
+This project is also part of my longer academic journey. I plan to continue improving and extending this research as preparation for future master degree study, especially in the area of Khmer-English code-switching speech recognition and practical AI systems for Cambodia.
+
+If you test the ASR model or try the system workflow, your feedback is warmly welcome. Suggestions, issues, comments, and ideas can help improve the model, the application, and the research direction. Please feel free to share feedback through the repository comment, issue, or discussion section.
